@@ -19,11 +19,6 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
      * @ORM\Column(type="string", length=30)
      */
     private $type;
@@ -32,16 +27,6 @@ class Location
      * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $dimension;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $created;
 
     public function getId(): ?int
     {
@@ -80,30 +65,6 @@ class Location
     public function setDimension(?string $dimension): self
     {
         $this->dimension = $dimension;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    public function getCreated(): ?string
-    {
-        return $this->created;
-    }
-
-    public function setCreated(string $created): self
-    {
-        $this->created = $created;
 
         return $this;
     }

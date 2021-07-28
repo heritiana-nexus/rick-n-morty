@@ -19,11 +19,6 @@ class Character
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $status;
@@ -47,16 +42,6 @@ class Character
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $created;
 
     public function getId(): ?int
     {
@@ -131,30 +116,6 @@ class Character
     public function setImage(?string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    public function getCreated(): ?string
-    {
-        return $this->created;
-    }
-
-    public function setCreated(string $created): self
-    {
-        $this->created = $created;
 
         return $this;
     }
