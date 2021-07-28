@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Character
 {
+    use BaseEntityTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Episode
 {
+    use BaseEntityTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

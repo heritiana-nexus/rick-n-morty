@@ -2,13 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\BaseEntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BaseEntityRepository::class)
- */
-class BaseEntity
+trait BaseEntityTrait
 {
     /**
      * @ORM\Id

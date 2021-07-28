@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Location
 {
+    use BaseEntityTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
