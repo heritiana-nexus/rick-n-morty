@@ -38,6 +38,7 @@ class CharacterDtoOutput
             "image"=> $this->character->getImage(),
             "episode"=> $this->character->getEpisode(),
             "url"=> $this->character->getUrl(),
+            "created" => date_format($this->character->getCreated(), DATE_ISO8601)
         ];
     }
 
