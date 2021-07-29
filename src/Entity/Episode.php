@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,9 +31,14 @@ class Episode
     private $episode;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\ManyToMany(targetEntity=Character::class, mappedBy="episode")
      */
-    private $characters = [];
+    private $character;
+
+    public function __construct()
+    {
+        $this->character = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -62,14 +69,29 @@ class Episode
         return $this;
     }
 
-    public function getCharacters(): ?array
+    /**
+     * @return Collection|Character[]
+     */
+    public function getCharacter(): Collection
     {
-        return $this->characters;
+        return $this->character;
     }
 
-    public function setCharacters(?array $characters): self
+    public function addCharacter(Character $character): self
     {
-        $this->characters = $characters;
+        if (!$this->character->contains($character)) {
+            $this->character[] = $character;
+            $character->addEpisode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): self
+    {
+        if ($this->character->removeElement($character)) {
+            $character->removeEpisode($this);
+        }
 
         return $this;
     }

@@ -2,9 +2,12 @@
 
 namespace App\Manager\Character;
 
+use App\Constant\Pagination;
 use App\Entity\Character;
+use App\Manager\PaginationService;
 use App\Repository\CharacterRepository;
 use App\Transformer\Character\OutputTransformer;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CharacterManager
 {
@@ -19,19 +22,36 @@ class CharacterManager
     private $transformer;
 
     /**
+     * @var PaginationService
+     */
+    private $paginationService;
+
+    /**
      * CharacterManager constructor.
      */
-    public function __construct(CharacterRepository $repository)
+    public function __construct(CharacterRepository $repository, OutputTransformer $transformer, PaginationService $paginationService)
     {
         $this->repository = $repository;
+        $this->transformer = $transformer;
+        $this->paginationService = $paginationService;
     }
 
     public function getCharacters()
     {
-        $characters = $this->repository->findAll();
-        dd($characters);
-        $output = array_map(function (Character $character){
+        $params = [];
+        $query = $this->repository->findByParams($params);
+        $characters = $this->paginationService->paginate($query, 1, 20);
+        $count = $this->paginationService->total($characters);
+        $output = array_map(function (Character $character) {
             return $this->transformer->transformOutput($character);
         }, $characters);
+        return [
+            'info' => [
+                'count' => $count,
+                'pages' => 1,
+                ''
+            ],
+            'results' => $output
+        ];
     }
 }

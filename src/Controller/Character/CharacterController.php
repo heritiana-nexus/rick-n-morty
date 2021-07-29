@@ -32,7 +32,7 @@ class CharacterController extends AbstractController
     public function getCharactersAction(Request $request)
     {
         $response = $this->manager->getCharacters();
-        dd('char heloo');
+        dd($response);
     }
 
 }

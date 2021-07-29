@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CharacterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,26 @@ class Character
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Location::class)
+     */
+    private $location;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Episode::class, inversedBy="character")
+     */
+    private $episode;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Location::class, inversedBy="residents")
+     */
+    private $origin;
+
+    public function __construct()
+    {
+        $this->episode = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -116,6 +138,54 @@ class Character
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Episode[]
+     */
+    public function getEpisode(): Collection
+    {
+        return $this->episode;
+    }
+
+    public function addEpisode(Episode $episode): self
+    {
+        if (!$this->episode->contains($episode)) {
+            $this->episode[] = $episode;
+        }
+
+        return $this;
+    }
+
+    public function removeEpisode(Episode $episode): self
+    {
+        $this->episode->removeElement($episode);
+
+        return $this;
+    }
+
+    public function getOrigin(): ?Location
+    {
+        return $this->origin;
+    }
+
+    public function setOrigin(?Location $origin): self
+    {
+        $this->origin = $origin;
 
         return $this;
     }
