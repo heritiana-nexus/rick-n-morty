@@ -21,12 +21,12 @@ class Episode
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable="true")
      */
     private $airDate;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable="true")
      */
     private $episode;
 
@@ -38,6 +38,7 @@ class Episode
     public function __construct()
     {
         $this->character = new ArrayCollection();
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int
@@ -94,5 +95,13 @@ class Episode
         }
 
         return $this;
+    }
+
+    public function dto()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->getName(),
+        ];
     }
 }

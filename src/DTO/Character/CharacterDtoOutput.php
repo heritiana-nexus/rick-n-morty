@@ -12,9 +12,13 @@ class CharacterDtoOutput
      */
     private $character;
 
-    public function __construct(Character $character)
+    /** @var string */
+    private $baseUrl;
+
+    public function __construct(Character $character, string $baseUrl)
     {
         $this->character = $character;
+        $this->baseUrl = $baseUrl;
     }
 
 
@@ -36,8 +40,8 @@ class CharacterDtoOutput
                 'url' => $this->character->getLocation()->getUrl(),
             ],
             "image"=> $this->character->getImage(),
-            "episode"=> $this->character->getEpisode(),
-            "url"=> $this->character->getUrl(),
+            "episode"=> array_map(function($episode) {return $episode->dto();},$this->character->getEpisode()),
+            "url"=> $this->baseUrl . $this->character->getId(),
             "created" => date_format($this->character->getCreated(), DATE_ISO8601)
         ];
     }

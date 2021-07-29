@@ -38,6 +38,7 @@ class Location
     public function __construct()
     {
         $this->residents = new ArrayCollection();
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int
@@ -109,5 +110,15 @@ class Location
         }
 
         return $this;
+    }
+
+    public function serialize()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'dimension' => $this->dimension,
+        ];
     }
 }

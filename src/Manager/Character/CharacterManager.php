@@ -5,6 +5,7 @@ namespace App\Manager\Character;
 use App\Constant\Pagination;
 use App\DTO\Character\CharacterDtoOutput;
 use App\Entity\Character;
+use App\Entity\Episode;
 use App\Entity\Location;
 use App\Manager\PaginationService;
 use App\Repository\CharacterRepository;
@@ -48,7 +49,7 @@ class CharacterManager
     public function getCharacters(string $baseUrl, array $params): array
     {
         $query = $this->repository->findByParams($params);
-        $page = (int) $params['page'] ?? 1;
+        $page = (int)$params['page'] ?? 1;
         $characters = $this->paginationService->paginate($query, $page, self::PAGE_LIMIT);
         $output = [];
         foreach ($characters as $character) {
@@ -73,10 +74,21 @@ class CharacterManager
         $character->setSpecies($payload['species'] ?? '');
         $character->setType($payload['type'] ?? '');
         $character->setGender($payload['gender'] ?? 'unknown');
-        $character->setOrigin($payload['origin'] ?? null);
-        if (!empty($payload['location'])) {
-            $location = $this->entityManager->getRepository(Location::class)->find((int) $payload['location']);
+        $location = $this->entityManager->getRepository(Location::class)->find((int)$payload['location'] ?? -1);
+        if ($location) {
             $character->setLocation($location);
+        }
+        $origin = $this->entityManager->getRepository(Location::class)->find((int)$payload['origin'] ?? -1);
+        if ($origin) {
+            $character->setOrigin($origin);
+        }
+        if (!empty($payload['episode'])) {
+            foreach ($payload['episode'] as $id) {
+                $episode = $this->entityManager->getRepository(Episode::class)->find($id);
+                if ($episode) {
+                    $character->addEpisode($episode);
+                }
+            }
         }
         $character->setImage($payload['image'] ?? '');
 

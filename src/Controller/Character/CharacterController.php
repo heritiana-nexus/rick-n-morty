@@ -32,9 +32,10 @@ class CharacterController extends AbstractController
     /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
-    public function read(Character $character)
+    public function read(Character $character, Request $request)
     {
-        $dto = new CharacterDtoOutput($character);
+        $baseUrl = $request->getSchemeAndHttpHost() . '/api/character/';
+        $dto = new CharacterDtoOutput($character, $baseUrl);
         return $this->json($dto->serialize());
     }
 
@@ -58,10 +59,14 @@ class CharacterController extends AbstractController
             $character = $this->manager->create(json_decode($request->getContent(), true));
             $em->persist($character);
             $em->flush([$character]);
-            return $this->json(['succes' => true, 'character' => (new CharacterDtoOutput($character))->serialize()]);
+            return $this->json([
+                'succes' => true,
+                'character' => (new CharacterDtoOutput($character, $request))->serialize(),
+                ], Response::HTTP_CREATED
+            );
 
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }
