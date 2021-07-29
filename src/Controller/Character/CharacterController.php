@@ -62,7 +62,7 @@ class CharacterController extends AbstractController
             $em->flush([$character]);
             return $this->json([
                 'success' => true,
-                'character' => (new CharacterDtoOutput($character, $request))->serialize(),
+                'character' => (new CharacterDtoOutput($character, $request->getSchemeAndHttpHost()))->serialize(),
                 ], Response::HTTP_CREATED
             );
 
@@ -86,7 +86,7 @@ class CharacterController extends AbstractController
             $em->flush([$character]);
             return $this->json([
                 'success' => true,
-                'character' => (new CharacterDtoOutput($character, $request))->serialize(),
+                'character' => (new CharacterDtoOutput($character, $request->getSchemeAndHttpHost()))->serialize(),
             ], Response::HTTP_OK
             );
 
