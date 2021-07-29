@@ -40,7 +40,7 @@ class CharacterDtoOutput
                 'url' => $this->character->getLocation()->getUrl(),
             ],
             "image"=> $this->character->getImage(),
-            "episode"=> array_map(function($episode) {return $episode->dto();},$this->character->getEpisode()),
+            "episode"=> array_map(function($episode) {return $episode->dto();},$this->character->getEpisode()->toArray()),
             "url"=> $this->baseUrl . $this->character->getId(),
             "created" => date_format($this->character->getCreated(), DATE_ISO8601)
         ];

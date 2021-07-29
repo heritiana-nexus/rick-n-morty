@@ -49,26 +49,26 @@ class CharacterManager
     public function getCharacters(string $baseUrl, array $params): array
     {
         $query = $this->repository->findByParams($params);
-        $page = (int)$params['page'] ?? 1;
+        $page = (int) ($params['page'] ?? 1);
         $characters = $this->paginationService->paginate($query, $page, self::PAGE_LIMIT);
         $output = [];
         foreach ($characters as $character) {
-            $output[] = (new CharacterDtoOutput($character))->serialize();
+            $output[] = (new CharacterDtoOutput($character, $baseUrl))->serialize();
         }
         return [
             'info' => [
                 'count' => $characters->count(),
-                'pages' => self::PAGE_LIMIT,
+                'pages' => floor($characters->count() / self::PAGE_LIMIT) + 1,
                 'next' => $baseUrl . $page + 1,
-                'prev' => $baseUrl . $page + 2
+                'prev' => $page > 1 ? $baseUrl . $page - 1 : null,
             ],
             'results' => $output
         ];
     }
 
-    public function create(array $payload)
+    public function save(array $payload, Character $character = null)
     {
-        $character = new Character();
+        $character = $character ?? new Character();
         $character->setName($payload['name'] ?? '');
         $character->setStatus($payload['status'] ?? 'unknown');
         $character->setSpecies($payload['species'] ?? '');

@@ -24,8 +24,26 @@ class CharacterRepository extends ServiceEntityRepository
      */
     public function findByParams($params)
     {
-        return $this->createQueryBuilder('c')
+
+        $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.location', 'location');
+        if(isset($params['name'])) {
+            $qb->andWhere('c.name = :name')->setParameter(':name', $params['name']);
+        }
+        if(isset($params['type'])) {
+            $qb->andWhere('c.type = :type')->setParameter(':type', $params['type']);
+        }
+        if(isset($params['gender'])) {
+            $qb->andWhere('c.gender = :gender')->setParameter(':gender', $params['gender']);
+        }
+        if(isset($params['species'])) {
+            $qb->andWhere('c.species = :species')->setParameter(':species', $params['species']);
+        }
+        if(isset($params['status'])) {
+            $qb->andWhere('c.status = :status')->setParameter(':status', $params['status']);
+        }
+
+        return $qb;
     }
 
     /*
