@@ -63,6 +63,7 @@ class Character
     public function __construct()
     {
         $this->episode = new ArrayCollection();
+        $this->setCreated(new \DateTime());
     }
 
     public function getId(): ?int

@@ -3,14 +3,15 @@
 namespace App\Manager\Character;
 
 use App\Constant\Pagination;
+use App\DTO\Character\CharacterDtoOutput;
 use App\Entity\Character;
 use App\Manager\PaginationService;
 use App\Repository\CharacterRepository;
 use App\Transformer\Character\OutputTransformer;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CharacterManager
 {
+    const PAGE_LIMIT = 20;
     /**
      * @var CharacterRepository
      */
@@ -36,26 +37,38 @@ class CharacterManager
         $this->paginationService = $paginationService;
     }
 
-    public function getCharacters()
+    public function getCharacters(string $baseUrl, array $params): array
     {
-        $params = [];
         $query = $this->repository->findByParams($params);
-        $characters = $this->paginationService->paginate($query, 1, 20);
-        $count = $this->paginationService->total($characters);
+        $page = (int) $params['page'] ?? 1;
+        $characters = $this->paginationService->paginate($query, $page, self::PAGE_LIMIT);
         $output = [];
-        foreach ($characters as $character){
-            $output[] = $this->transformer->transformOutput($character);
+        foreach ($characters as $character) {
+            $output[] = (new CharacterDtoOutput($character))->serialize();
         }
-//        $output = array_map(function (Character $character) {
-//            return
-//        }, $characters);
         return [
             'info' => [
-                'count' => $count,
-                'pages' => 1,
-                ''
+                'count' => $characters->count(),
+                'pages' => self::PAGE_LIMIT,
+                'next' => $baseUrl . $page + 1,
+                'prev' => $baseUrl . $page + 2
             ],
             'results' => $output
         ];
+    }
+
+    public function create(array $payload)
+    {
+        $character = new Character();
+        $character->setName($payload['name'] ?? '');
+        $character->setStatus($payload['status'] ?? 'unknown');
+        $character->setSpecies($payload['species'] ?? '');
+        $character->setType($payload['type'] ?? '');
+        $character->setGender($payload['gender'] ?? 'unknown');
+        $character->setOrigin($payload['origin'] ?? null);
+        $character->setLocation($payload['location'] ?? null);
+        $character->setImage($payload['image'] ?? '');
+
+        return $character;
     }
 }
