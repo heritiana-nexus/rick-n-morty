@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +29,17 @@ class Location
      * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $dimension;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Character::class, mappedBy="origin")
+     */
+    private $residents;
+
+    public function __construct()
+    {
+        $this->residents = new ArrayCollection();
+        $this->created = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -67,5 +80,45 @@ class Location
         $this->dimension = $dimension;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Character[]
+     */
+    public function getResidents(): Collection
+    {
+        return $this->residents;
+    }
+
+    public function addResident(Character $resident): self
+    {
+        if (!$this->residents->contains($resident)) {
+            $this->residents[] = $resident;
+            $resident->setOrigin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResident(Character $resident): self
+    {
+        if ($this->residents->removeElement($resident)) {
+            // set the owning side to null (unless already changed)
+            if ($resident->getOrigin() === $this) {
+                $resident->setOrigin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function serialize()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'dimension' => $this->dimension,
+        ];
     }
 }

@@ -14,17 +14,18 @@ trait BaseEntityTrait
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable="true")
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable="true")
      */
     private $url;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime")
      */
     private $created;
 
@@ -57,15 +58,19 @@ trait BaseEntityTrait
         return $this;
     }
 
-    public function getCreated(): ?string
+    /**
+     * @return \DateTime|null
+     */
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
 
-    public function setCreated(string $created): self
+    /**
+     * @param \DateTime|null $created
+     */
+    public function setCreated(?\DateTime $created): void
     {
         $this->created = $created;
-
-        return $this;
     }
 }

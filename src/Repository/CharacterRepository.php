@@ -19,22 +19,32 @@ class CharacterRepository extends ServiceEntityRepository
         parent::__construct($registry, Character::class);
     }
 
-    // /**
-    //  * @return Character[] Returns an array of Character objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Character[] Returns an array of Character objects
+     */
+    public function findByParams($params)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.location', 'location');
+        if(isset($params['name'])) {
+            $qb->andWhere('c.name = :name')->setParameter(':name', $params['name']);
+        }
+        if(isset($params['type'])) {
+            $qb->andWhere('c.type = :type')->setParameter(':type', $params['type']);
+        }
+        if(isset($params['gender'])) {
+            $qb->andWhere('c.gender = :gender')->setParameter(':gender', $params['gender']);
+        }
+        if(isset($params['species'])) {
+            $qb->andWhere('c.species = :species')->setParameter(':species', $params['species']);
+        }
+        if(isset($params['status'])) {
+            $qb->andWhere('c.status = :status')->setParameter(':status', $params['status']);
+        }
+
+        return $qb;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Character
