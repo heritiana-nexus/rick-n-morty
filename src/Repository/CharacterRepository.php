@@ -25,7 +25,7 @@ class CharacterRepository extends ServiceEntityRepository
     public function findByParams($params)
     {
         return $this->createQueryBuilder('c')
-        ->leftJoin('c.location', 'location');
+            ->leftJoin('c.location', 'location');
     }
 
     /*

@@ -42,9 +42,13 @@ class CharacterManager
         $query = $this->repository->findByParams($params);
         $characters = $this->paginationService->paginate($query, 1, 20);
         $count = $this->paginationService->total($characters);
-        $output = array_map(function (Character $character) {
-            return $this->transformer->transformOutput($character);
-        }, $characters);
+        $output = [];
+        foreach ($characters as $character){
+            $output[] = $this->transformer->transformOutput($character);
+        }
+//        $output = array_map(function (Character $character) {
+//            return
+//        }, $characters);
         return [
             'info' => [
                 'count' => $count,
