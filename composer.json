@@ -15,7 +15,8 @@
         "symfony/framework-bundle": "4.4.*",
         "symfony/proxy-manager-bridge": "4.4.*",
         "symfony/yaml": "4.4.*",
-        "symfony/maker-bundle": "^1.33"
+        "symfony/maker-bundle": "^1.33",
+        "ext-pdo_sqlite": "*"
     },
     "require-dev": {
     },
